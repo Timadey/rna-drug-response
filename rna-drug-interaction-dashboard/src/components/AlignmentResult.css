@@ -12,15 +12,73 @@
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Courier New', Courier, monospace;
+  overflow-x: auto; /* Add horizontal scroll */
 }
 
 .alignment {
-  margin-bottom: 10px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  background-color: #e6f7ff;
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.sequence {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  margin-bottom: 5px;
+}
+
+.match-line {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  margin-bottom: 5px;
+}
+
+.char {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  margin: 1px;
   border-radius: 5px;
-  border: 1px solid #b3e5fc;
   font-family: 'Courier New', Courier, monospace;
+}
+
+.a {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.t {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.c {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.g {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.match {
+  color: green;
+}
+
+.mismatch {
+  color: red;
+}
+
+.gap {
+  color: gray;
+}
+
+.score {
+  margin-top: 10px;
+  font-weight: bold;
 }
