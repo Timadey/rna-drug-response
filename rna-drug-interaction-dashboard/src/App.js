@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import FileUpload from './components/FileUpload';
-import Results from './components/Results';
+import AlignmentForm from './components/AlignmentForm';
+import AlignmentResult from './components/AlignmentResult';
 import './App.css';
 
 function App() {
@@ -9,9 +9,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>RNA-Drug Interaction</h1>
-        <FileUpload setResults={setResults} />
-        {results && <Results results={results} />}
+        <h1>Sequence Alignment Tool</h1>
+        <AlignmentForm setResults={setResults} />
+        {results && <AlignmentResult results={results} />}
       </header>
     </div>
   );

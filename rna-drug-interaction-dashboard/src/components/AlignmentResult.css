@@ -1,0 +1,26 @@
+.results-container {
+  margin-top: 20px;
+}
+
+.results-container h2 {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+}
+
+.alignments {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.alignment {
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: #e6f7ff;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #b3e5fc;
+  font-family: 'Courier New', Courier, monospace;
+}

@@ -1,14 +1,15 @@
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import os
-from Bio import SeqIO
+from pydantic import BaseModel
+from Bio import pairwise2
+from Bio.pairwise2 import format_alignment
 
 app = FastAPI()
 
 # Configure CORS
 origins = [
     "http://localhost:3000",
+    "https://potential-barnacle-p97q44vjq9526j6p-8000.app.github.dev",
     "https://potential-barnacle-p97q44vjq9526j6p-3000.app.github.dev"
 ]
 
@@ -20,36 +21,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-UPLOAD_FOLDER = 'uploads'
+class AlignmentRequest(BaseModel):
+    sequence1: str
+    sequence2: str
+    alignment_type: str  # "global" or "local"
 
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+@app.post("/align")
+async def align_sequences(request: AlignmentRequest):
+    seq1 = request.sequence1
+    seq2 = request.sequence2
+    alignment_type = request.alignment_type
 
-# Mock disease marker database
-disease_markers = {
-    "AAA": "Disease A",
-    "CCC": "Disease B",
-    "GGG": "Disease C"
-}
+    if alignment_type not in ["global", "local"]:
+        raise HTTPException(status_code=400, detail="Invalid alignment type. Must be 'global' or 'local'.")
 
-def analyze_rna_sequence(filepath):
-    sequence = SeqIO.read(filepath, "fasta")
-    rna_seq = str(sequence.seq)
+    if alignment_type == "global":
+        alignments = pairwise2.align.globalxx(seq1, seq2)
+    else:
+        alignments = pairwise2.align.localxx(seq1, seq2)
 
-    markers_found = {}
-    for marker, disease in disease_markers.items():
-        if marker in rna_seq:
-            markers_found[marker] = disease
+    formatted_alignments = [format_alignment(*alignment) for alignment in alignments]
 
-    return markers_found, rna_seq
-
-@app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
-    with open(filepath, "wb") as f:
-        f.write(await file.read())
-    markers_found, rna_seq = analyze_rna_sequence(filepath)
-    return JSONResponse(content={"markers_found": markers_found, "rna_seq": rna_seq})
+    return {"alignments": formatted_alignments}
 
 if __name__ == "__main__":
     import uvicorn
